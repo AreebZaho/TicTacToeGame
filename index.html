@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <h1>TicTacToe by Areeb</h1>
+    <div id="frnd" class="playBtn frnd btn">PLAY WITH A FRIEND</div>
+    <div id="playerInp" class="playerInp">
+        <input id="p1" class="hide" placeholder="Player 1">
+        <input id="p2" class="hide" placeholder="Player 2">
+    </div>
+    <div id="scoreFrnd" class="scoreBoard hide">
+        <div id="scoreP1"></div>
+        <div id="scoreP2"></div>
+    </div>
+    <div id="plus" class="hide"><i class="fa-solid fa-plus"></i></div>
+    <div id="comp" class="playBtn comp btn">PLAY AGAINST COMPUTER</div>
+    <div id="playerInpComp" class="playerInp">
+        <input id="p" class="hide" placeholder="Enter Name:">
+    </div>
+    <div id="scoreComp" class="scoreBoard hide">
+        <div id="scoreP"></div>
+        <div id="scoreC"></div>
+    </div>
+    <div id="goFirst" class="hide btn">
+        <label for="goFirstInput">GO FIRST</label>
+        <input id="goFirstInput" type="checkbox">
+    </div>
+    <div class="outerDivOfSkip">
+        <div id="skip" class="skip hide btn">SKIP</div>
+    </div>
+    <div id="grid" class="grid">
+        <div class="cell a" id="00"></div>
+        <div class="cell" id="01"></div>
+        <div class="cell b" id="02"></div>
+        <div class="cell" id="10"></div>
+        <div class="cell" id="11"></div>
+        <div class="cell" id="12"></div>
+        <div class="cell c" id="20"></div>
+        <div class="cell" id="21"></div>
+        <div class="cell d" id="22"></div>
+        <div class="victLine hide" id="v0"></div>
+        <div class="victLine hide" id="v1"></div>
+        <div class="victLine hide" id="v2"></div>
+        <div class="victLine hide" id="h0"></div>
+        <div class="victLine hide" id="h1"></div>
+        <div class="victLine hide" id="h2"></div>
+        <div class="victLine hide" id="topLeftToBottomRight"></div>
+        <div class="victLine hide" id="topRightToBottomLeft"></div>
+    </div>
+</body>
+<script src="app.js"></script>
+</html>

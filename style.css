@@ -1,0 +1,296 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: none;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; width: 100vw;
+    position: relative;
+}
+h1 {
+    position: absolute;
+    top: 60px;
+}
+.grid {
+    width: 333px; aspect-ratio: 1/1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 100px;
+    transition: all 0.2s;
+    border: 1px solid black;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+}
+.cell {
+    height: 110px; aspect-ratio: 1/1;
+    border: 1px solid black;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    font-size: 4rem;
+    transition: all 0.1s;
+}
+.cellHover {
+    background-color: rgb(154, 136, 90);
+    opacity: 0.4;
+}
+.a {
+    border-top-left-radius: 15px;
+}
+.b {
+    border-top-right-radius: 15px;
+}
+.c {
+    border-bottom-left-radius: 15px;
+}
+.d {
+    border-bottom-right-radius: 15px;
+}
+.playBtn {
+    height: 35px; width: auto;
+    margin: 20px;
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 5px 10px;
+    background: linear-gradient(45deg, #9b59b6, #34495e);
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0px 2px 10px rgba(93, 34, 33, 0.7);
+    transition: all 0.2s ease;
+    position: absolute;
+    top: 140px;
+}
+.frnd {
+    background: linear-gradient(45deg, #2ecc71, #3498db);
+    color: #fff;
+}
+.comp {
+    top: 220px;
+    background: linear-gradient(45deg, #e74c3c, #f39c12);
+    color: #fff;
+}
+.playBtn:hover {
+    background: linear-gradient(45deg, #3498db, #f39c12);
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+.frndToBack {
+    animation: frndToBack 0.2s;
+    left: 40vw; top: 150px;
+}
+@keyframes frndToBack {
+    from {left: 50%}
+    to {left: 41vw; top: 150px;}
+}
+.playerInp {
+    position: absolute;
+    top: 18%;
+    left: 46.5%;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: all 3s;
+}
+.playerInp input {
+    width: 150px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 5px;
+}
+.skip {
+    background: linear-gradient(45deg, #ff6b6b, #ffa06b);
+    color: #fff;
+    padding: 6px 12px;
+    border: 2px solid #ff6b6b;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+.outerDivOfSkip {
+    position: absolute; left: 48.25%; top: 34.3%;
+    transition: all 3s;
+    opacity: 0;
+}
+.skip:hover {
+    background: linear-gradient(45deg, #ffa06b, #ff6b6b);
+    transform: translateY(-2px);
+}
+.skipFrnd {
+    position: absolute;
+    top: 33%;
+    left: 50%;
+}
+.gridSlideFrnd {
+    transform: translateY(-40px);
+}
+.scoreBoard {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.scoreBoard div {
+    font-weight: 500;
+}
+#scoreFrnd {
+    position: absolute; top: 20.5%; left: 46%;
+}
+.plusForP1 {
+    position: absolute; top: 22%; left: 53%;
+}
+.plusForP2 {
+    position: absolute; top: 25%; left: 53%;
+}
+#comp {
+    transition: all 0s;
+}
+.compToBack {
+    top: 14vh; left: 47.4vw;
+}
+#playerInpComp {
+    top: 25%; left: 44.7%;
+}
+.skipComp {
+    position: absolute; top: 35%;
+}
+#scoreComp {
+    position: absolute; top: 25.5%; left: 46.5%;
+}
+.gridSlideComp {
+    transform: translateY(25px);
+}
+.plusForP {
+    position: absolute; top: 20%; left: 57%;
+}
+.plusForC {
+    position: absolute; top: 25%; left: 53%;
+}
+.goFirst {
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; top: 38%; right: 46.9%;
+    height: 30px;
+    padding:2px 6px; 
+    border: 2px solid black;
+    font-weight: 500;
+    background: linear-gradient(45deg, #3498db, #e74c3c, #9b59b6, #2ecc71);
+    background-size: 400% 400%;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+.goFirst:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3); 
+    background-position: 100% 100%;
+}
+.goFirst label {
+    margin: 0 8px 2px 0;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.goFirst input {
+    appearance: none; height: 10px; aspect-ratio: 1/1;
+    background-color: wheat;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.goFirst input:checked {
+    background-color: #302120;
+}
+.drawDisplay {
+    font-size: 2rem;
+    display: flex; align-items: center; justify-content: center;
+}
+.cellClick {
+    font-size: 3rem;
+}
+.victLine {
+    background: linear-gradient(45deg, #3498db, #e74c3c);
+    border-radius: 100px;
+    transition: all 0.5s;
+}
+#v0, #v1, #v2 {
+    height: 276px; width: 8px;
+    position: absolute; top: 8.5%; left: 14.5%;
+    animation: vertical 1s;
+}
+#v1 {
+    left: 49%;
+}
+#v2 {
+    left: 81.6%;
+}
+#h0, #h1, #h2 {
+    height: 8px; width: 276px;
+    position: absolute; left: 8%; top: 16%;
+    animation: horizontal 1s;
+}
+#h1 {
+    top: 49.5%;
+}
+#h2 {
+    top: 82.5%;
+}
+#topLeftToBottomRight, #topRightToBottomLeft {
+    height: 8px; width: 368px;
+    position: absolute; top: 49.5%;
+    transform: rotate(45deg);
+    animation: diagonal 1s;
+}
+#topRightToBottomLeft {
+    transform: rotate(-45deg);
+}
+@keyframes horizontal {
+    from {width: 0px}
+    to {width: 276px}
+}
+@keyframes vertical {
+    from {height: 0px}
+    to {height: 276px}
+}
+@keyframes diagonal {
+    from {width: 0px}
+    to {width: 368px}
+}
+
+
+
+.hide {
+    display: none;
+}
+.appear {
+    opacity: 1;
+}
+.disappear {
+    opacity: 0;
+}
+.btn:active {
+    transform: scale(0.95);
+}
+h1::before {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    height: 4px;
+    width: 0;
+    background: linear-gradient(45deg, #3498db, #e74c3c);
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+h1:hover::before {
+    width: 100%;
+}
