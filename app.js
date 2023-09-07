@@ -28,10 +28,10 @@ const goFirst = document.querySelector('#goFirst');
 const goFirstInp = document.querySelector('#goFirstInput');
 const slider = document.querySelector('#slider');
 let waitForCompMove = false;
+let cellMark = '';
 
 frnd.addEventListener('click', () => {
     if (frnd.innerHTML != backArrow) {
-        playMode = 1; 
         frnd.innerHTML = backArrow;
         comp.classList.add('hide');
         frnd.classList.add('frndToBack');
@@ -40,9 +40,11 @@ frnd.addEventListener('click', () => {
         skip.classList.remove('hide');
         skip.classList.add('skipFrnd');
         document.querySelector('.outerDivOfSkip').classList.add('appear');
+        playMode = 1; 
     }
     else {
         restartGame();
+        playMode = 0;
         start = false;
         displayGrid.classList.remove('gridSlideFrnd');
         document.querySelector('#scoreFrnd').classList.remove('appear');
@@ -57,12 +59,10 @@ frnd.addEventListener('click', () => {
         frnd.classList.remove('frndToBack');
         comp.classList.remove('hide');
         frnd.innerText = 'PLAY WITH A FRIEND';
-        playMode = 0;
     }    
 });
 comp.addEventListener('click', () => {
     if (comp.innerHTML != backArrow) {
-        playMode = 2; 
         comp.innerHTML = backArrow;
         frnd.classList.add('hide');
         comp.classList.add('compToBack');
@@ -71,17 +71,13 @@ comp.addEventListener('click', () => {
         skip.classList.remove('hide');
         skip.classList.add('skipComp');
         document.querySelector('.outerDivOfSkip').classList.add('appear');
+        playMode = 2; 
     }
     else {
         restartGame();//enables goFirst also
+        playMode = 0;
         start = false;
-        displayGrid.classList.remove('gridSlideComp');
-        slider.classList.add('hide');
-        slider.classList.remove('shrink');
-        slider.style.width = '200px';
-        goFirstInp.checked = true;
-        compMark = xMark;
-        waitForCompMove = false;
+        goFirstInpCheck();
         goFirst.classList.add('hide');
         document.querySelector('#scoreComp').classList.remove('appear');
         scoreP.classList.add('hide'); scoreC.classList.add('hide');
@@ -96,7 +92,6 @@ comp.addEventListener('click', () => {
         comp.classList.remove('compToBack');
         frnd.classList.remove('hide');
         comp.innerText = 'PLAY AGAINST COMPUTER';
-        playMode = 0;
     }
 });
 
@@ -146,34 +141,37 @@ enable = () => {
     goFirstInp.disabled = false;
 }
 
-goFirst.addEventListener('click', (e) => {
-    if (goFirstInp.checked) {
-        waitForCompMove = true;
-        compMark = oMark; 
-        goFirstInp.checked = false;
-        displayGrid.classList.remove('gridSlideComp');
-        slider.classList.remove('hide');
-        slider.classList.add('shrink');
-        slider.style.width = '0px';
-        setTimeout(() => {
-            displayGrid.classList.add('gridSlideComp');
-            disable();
-            if (goFirstInp.checked) {
-                enable();//if goFirst was clicked agin while slider was shrinking
-                return;
-            }
-            compMove();
-        }, 1800);
-    }
-    else {
-        waitForCompMove = false;
-        compMark = xMark;
-        goFirstInp.checked = true;
-        slider.classList.remove('shrink');
-        slider.classList.add('hide');
-        slider.style.width = '200px';
+goFirstInpUncheck = () => {
+    waitForCompMove = true;
+    compMark = oMark; 
+    goFirstInp.checked = false;
+    displayGrid.classList.remove('gridSlideComp');
+    slider.classList.remove('hide');
+    slider.classList.add('shrink');
+    slider.style.width = '0px';
+    setTimeout(() => {
         displayGrid.classList.add('gridSlideComp');
-    }
+        disable();
+        if (goFirstInp.checked) {
+            enable();//if goFirst was clicked agin while slider was shrinking
+            return;
+        }
+        compMove();
+    }, 1800);
+}
+
+goFirstInpCheck = () => {
+    waitForCompMove = false;
+    compMark = xMark;
+    goFirstInp.checked = true;
+    slider.classList.remove('shrink');
+    slider.classList.add('hide');
+    slider.style.width = '200px';
+    displayGrid.classList.add('gridSlideComp');
+}
+
+goFirst.addEventListener('click', (e) => {
+    (goFirstInp.checked) ? goFirstInpUncheck() : goFirstInpCheck();
 })
 
 generateCell = () => {
@@ -185,18 +183,14 @@ generateCell = () => {
 }
 
 compMove = () => {
-    waitForCompMove = true;
     const cellID = generateCell();
     const cell = document.getElementById(cellID);
-    cell.innerHTML = compMark;
+    cell.innerHTML = cellMark = compMark;
     cell.classList.add('cellClick');
     setTimeout(() => {
         cell.classList.remove('cellClick');
-        gridPush(cell, compMark);
+        gridPush(cell, cellMark);
     }, 100);
-    setTimeout(() => {
-        waitForCompMove = false;
-    }, 300);
 }
 
 for (let cell of cells) {
@@ -220,39 +214,51 @@ for (let cell of cells) {
     })
     cell.addEventListener('click', () => {
         if (!start || grid[r][c] !== '' || waitForCompMove) return;
-        disable();
         cell.classList.remove('cellHover');
         if (playMode == 1){
-            cell.innerHTML = currMark;
+            cell.innerHTML = cellMark = currMark;
             cell.classList.add('cellClick');
             setTimeout(() => {
                 cell.classList.remove('cellClick');
-                gridPush(cell, cell.innerHTML);
+                gridPush(cell, cellMark);
                 currMark = (currMark == oMark) ? xMark : oMark;
             }, 100);
         }
         if (playMode == 2) {
-            cell.innerHTML = (compMark === oMark) ? xMark : oMark;
+            disable();
+            cell.innerHTML = cellMark = (compMark === oMark) ? xMark : oMark;
             cell.classList.add('cellClick');
             setTimeout(() => {
                 cell.classList.remove('cellClick');
-                gridPush(cell, cell.innerHTML);
+                waitForCompMove = true;
+                gridPush(cell, cellMark);
             }, 100);
         }
     })
 }
 
-gridPush = (cell, cellMark) => {  
+gridPush = (cell) => {  
     const id = String(cell.id);
     const r = Number.parseInt(id[0]); 
     const c = Number.parseInt(id[1]);
     grid[r][c] = cellMark;
-    if (++count >= 5) {
+    count++;
+    if (count < 5) {
+        if (playMode == 2) {
+            if (compMark !== cellMark) {
+                setTimeout(() => {
+                    compMove();
+                }, 800);
+            }
+            else waitForCompMove = false;
+        }
+    }
+    else {
         if (checkForWin(r, c)) {
             start = false;
             victoryLine();            
             setTimeout(() => {
-                win(cellMark); return;
+                win(); 
             }, 1700);
         }
         else if (count == 9) {
@@ -261,13 +267,18 @@ gridPush = (cell, cellMark) => {
                 restartGame();
             }, 1000);
         }
+        else if (playMode == 2) {
+            if (compMark !== cellMark) {
+                setTimeout(() => {
+                    compMove();
+                }, 800);
+            }
+            else waitForCompMove = false;
+        }
     }
-    else setTimeout(() => {
-        compMove();
-    }, 800);
 }
 
-win = (cellMark) => {
+win = () => {
     plus.classList.remove('hide');
     if (playMode == 1) {
         if (cellMark == oMark) {
@@ -343,11 +354,10 @@ topRightToBottomLeft = (r, c) => {
     return false;
 }
 isValid = (x, y) => {
-    return 0 <= x && x <= 2 && 0 <= y && y <= 2 && grid[x][y] == currMark;
+    return 0 <= x && x <= 2 && 0 <= y && y <= 2 && grid[x][y] == cellMark;
 }
 
 restartGame = () => {
-    enable();
     count = 0;
     for (cell of cells) {
         cell.innerText = '';
@@ -358,7 +368,8 @@ restartGame = () => {
         currMark = oMark;
     }
     if (playMode == 2) {
-        (goFirstInp.checked) ? currMark = oMark : xMark;
+        enable();
+        (goFirstInp.checked) ? goFirstInpCheck() : goFirstInpUncheck();
     }
 }
 
