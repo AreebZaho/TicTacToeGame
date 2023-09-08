@@ -5,7 +5,6 @@ let count = 0;
 let playMode = 0;
 let currMark = oMark;
 const skip = document.querySelector('#skip');
-const plus = document.querySelector('#plus');
 const displayGrid = document.querySelector('#grid');
 const cells = document.querySelectorAll('.cell');
 const grid = [['', '', ''], ['', '', ''], ['', '', '']];
@@ -77,7 +76,7 @@ comp.addEventListener('click', () => {
         restartGame();//enables goFirst also
         playMode = 0;
         start = false;
-        goFirstInpCheck();
+        goFirstInpMarkCheck();
         goFirst.classList.add('hide');
         document.querySelector('#scoreComp').classList.remove('appear');
         scoreP.classList.add('hide'); scoreC.classList.add('hide');
@@ -110,7 +109,7 @@ skip.addEventListener('click', () => {
         if (skip.innerText == 'ENTER') {
             player1 = p1.value; player2 = p2.value;
         }
-        scoreP1.innerText = player1 + ': ' + score1; scoreP2.innerText = player2 + ': ' + score2;
+        scoreP1.innerHTML = player1 + ':&nbsp;&nbsp;&nbsp;' + score1; scoreP2.innerHTML = player2 + ':&nbsp;&nbsp;&nbsp;' + score2;
         p1.classList.add('hide'); p2.classList.add('hide'); 
         scoreP1.classList.remove('hide'); scoreP2.classList.remove('hide');
         document.querySelector('#scoreFrnd').classList.add('appear');
@@ -120,7 +119,7 @@ skip.addEventListener('click', () => {
         if (skip.innerText == 'ENTER') {
             player = p.value;
         }
-        scoreP.innerText = player + ': ' + score1; scoreC.innerText = 'Computer: ' + score2;
+        scoreP.innerHTML = player + ':&nbsp;&nbsp;&nbsp;' + score1; scoreC.innerHTML = 'Computer:&nbsp;&nbsp;&nbsp;' + score2;
         p.classList.add('hide'); 
         comp.classList.add('compToBack1');
         scoreP.classList.remove('hide'); scoreC.classList.remove('hide');
@@ -139,39 +138,44 @@ disable = () => {
 enable = () => {
     goFirst.classList.remove('disable');
     goFirstInp.disabled = false;
+    (goFirstInp.checked) ? waitForCompMove = false : goFirstInpMarkUncheck();
 }
 
-goFirstInpUncheck = () => {
+goFirstInpMarkUncheck = () => {
     waitForCompMove = true;
     compMark = oMark; 
     goFirstInp.checked = false;
     displayGrid.classList.remove('gridSlideComp');
     slider.classList.remove('hide');
     slider.classList.add('shrink');
-    slider.style.width = '0px';
-    setTimeout(() => {
-        displayGrid.classList.add('gridSlideComp');
+    let timeout = setTimeout(() => {
         disable();
-        if (goFirstInp.checked) {
-            enable();//if goFirst was clicked agin while slider was shrinking
-            return;
-        }
+        slider.classList.add('hide');
+        displayGrid.classList.add('gridSlideComp');
         compMove();
     }, 1800);
+    let i = 0;
+    let interval = setInterval(() => {
+        i++;
+        if (goFirstInp.checked) {
+            clearTimeout(timeout);
+            clearInterval(interval);
+        }
+        if (i == 1800) clearInterval(interval);
+    }, 1);
 }
 
-goFirstInpCheck = () => {
+goFirstInpMarkCheck = () => {
     waitForCompMove = false;
     compMark = xMark;
     goFirstInp.checked = true;
     slider.classList.remove('shrink');
     slider.classList.add('hide');
-    slider.style.width = '200px';
     displayGrid.classList.add('gridSlideComp');
 }
 
 goFirst.addEventListener('click', (e) => {
-    (goFirstInp.checked) ? goFirstInpUncheck() : goFirstInpCheck();
+    (goFirstInp.checked) ? goFirstInpMarkUncheck() : goFirstInpMarkCheck();
 })
 
 generateCell = () => {
@@ -198,22 +202,34 @@ for (let cell of cells) {
     const r = Number.parseInt(id[0]); 
     const c = Number.parseInt(id[1]);
     cell.addEventListener('mouseenter', () => {
-        if (!start || waitForCompMove) return;
-        if (grid[r][c] === '') {
+        if (!start || cell.innerHTML !== '') return;
+        if (playMode == 1) {
             cell.style.cursor = 'pointer';
             cell.classList.add('cellHover');
-            cell.innerHTML = (playMode == 1) ? currMark : (compMark == oMark) ? xMark : oMark;
+            cell.innerHTML = currMark;
+        }
+        else if (playMode == 2 && !waitForCompMove) {
+            cell.style.cursor = 'pointer';
+            cell.classList.add('cellHover');
+            cell.innerHTML = (compMark == oMark) ? xMark : oMark;
         }
     })
     cell.addEventListener('mouseleave', () => {
         cell.style.cursor = 'default';
         cell.classList.remove('cellHover');
-        if (grid[r][c] === '') {
-            cell.innerHTML = '';
+        if (playMode == 1) {
+            if (grid[r][c] === '') {
+                cell.innerHTML = '';
+            }
+        }
+        else if (playMode == 2) {
+            if (grid[r][c] === '' && !waitForCompMove) {
+                cell.innerHTML = '';
+            }
         }
     })
     cell.addEventListener('click', () => {
-        if (!start || grid[r][c] !== '' || waitForCompMove) return;
+        if (!start || grid[r][c] !== '') return;
         cell.classList.remove('cellHover');
         if (playMode == 1){
             cell.innerHTML = cellMark = currMark;
@@ -224,13 +240,13 @@ for (let cell of cells) {
                 currMark = (currMark == oMark) ? xMark : oMark;
             }, 100);
         }
-        if (playMode == 2) {
+        if (playMode == 2 && !waitForCompMove) {
             disable();
             cell.innerHTML = cellMark = (compMark === oMark) ? xMark : oMark;
             cell.classList.add('cellClick');
+            waitForCompMove = true;
             setTimeout(() => {
                 cell.classList.remove('cellClick');
-                waitForCompMove = true;
                 gridPush(cell, cellMark);
             }, 100);
         }
@@ -279,48 +295,44 @@ gridPush = (cell) => {
 }
 
 win = () => {
-    plus.classList.remove('hide');
     if (playMode == 1) {
         if (cellMark == oMark) {
-            plus.classList.add('plusForP1'); score1++;
+            scoreP1.classList.add('pointEarnShine'); score1++;
         } 
         else {
-            plus.classList.add('plusForP2'); score2++;
+            scoreP2.classList.add('pointEarnShine'); score2++;
         }
-        scoreP1.innerText = player1 + ': ' + score1; 
-        scoreP2.innerText = player2 + ': ' + score2; 
+        scoreP1.innerHTML = player1 + ':&nbsp;&nbsp;&nbsp;' + score1; 
+        scoreP2.innerHTML = player2 + ':&nbsp;&nbsp;&nbsp;' + score2; 
         setTimeout(() => {
-            (cellMark == oMark) ? plus.classList.remove('plusForP1') : plus.classList.remove('plusForP2');
-            plus.classList.add('hide');
+            (cellMark == oMark) ? scoreP1.classList.remove('pointEarnShine') : scoreP2.classList.remove('pointEarnShine');;
         }, 250);
     }
     else {
         if (compMark == oMark) {
             if (cellMark == oMark) {
-                plus.classList.add('plusForC'); score2++;
+                scoreC.classList.add('pointEarnShine'); score2++;
             }
             else {
-                plus.classList.add('plusForP'); score1++;
+                scoreP.classList.add('pointEarnShine'); score1++;
             }
             setTimeout(() => {
-                (cellMark == oMark) ? plus.classList.remove('plusForC') : plus.classList.remove('plusForP');
-                plus.classList.add('hide');
+                (cellMark == oMark) ? scoreC.classList.remove('pointEarnShine') : scoreP.classList.remove('pointEarnShine');
             }, 250);
         }
         else {
             if (cellMark == oMark) {
-                plus.classList.add('plusForP'); score1++;
+                scoreP.classList.add('pointEarnShine'); score1++;
             }
             else {
-                plus.classList.add('plusForC'); score2++;
+                scoreC.classList.add('pointEarnShine'); score2++;
             }
             setTimeout(() => {
-                (cellMark == oMark) ? plus.classList.remove('plusForP') : plus.classList.remove('plusForC');
-                plus.classList.add('hide');
+                (cellMark == oMark) ? scoreP.classList.remove('pointEarnShine') : scoreC.classList.remove('pointEarnShine');
             }, 250);
         }
-        scoreP.innerText = player + ': ' + score1; 
-        scoreC.innerText = 'Computer: ' + score2; 
+        scoreP.innerHTML = player + ':&nbsp;&nbsp;&nbsp;' + score1; 
+        scoreC.innerHTML = 'Computer:&nbsp;&nbsp;&nbsp;' + score2; 
     }
     restartGame();
 }
@@ -359,18 +371,11 @@ isValid = (x, y) => {
 
 restartGame = () => {
     count = 0;
-    for (cell of cells) {
-        cell.innerText = '';
-    }
+    for (cell of cells) cell.innerText = '';
     for (row of grid) row.fill('');
     start = true;
-    if (playMode == 1) {
-        currMark = oMark;
-    }
-    if (playMode == 2) {
-        enable();
-        (goFirstInp.checked) ? goFirstInpCheck() : goFirstInpUncheck();
-    }
+    if (playMode == 1) currMark = oMark;
+    if (playMode == 2) enable();
 }
 
 draw = () => {
