@@ -5,12 +5,13 @@ let count = 0;
 let playMode = 0;
 let currMark = oMark;
 const skip = document.querySelector('#skip');
+const skipDiv = document.querySelector('.outerDivOfSkip');
 const displayGrid = document.querySelector('#grid');
 const cells = document.querySelectorAll('.cell');
 const grid = [['', '', ''], ['', '', ''], ['', '', '']];
 let start = false;
 const frnd = document.querySelector('#frnd');
-const playerInp = document.querySelector('#playerInp');
+const playerInpFrnd = document.querySelector('#playerInpFrnd');
 const p1 = document.querySelector('#p1');
 const p2 = document.querySelector('#p2');
 const scoreP1 = document.querySelector('#scoreP1');
@@ -35,10 +36,9 @@ frnd.addEventListener('click', () => {
         comp.classList.add('hide');
         frnd.classList.add('frndToBack');
         p1.classList.remove('hide'); p2.classList.remove('hide'); 
-        playerInp.classList.add('appear');
+        playerInpFrnd.classList.add('appear');
         skip.classList.remove('hide');
-        skip.classList.add('skipFrnd');
-        document.querySelector('.outerDivOfSkip').classList.add('appear');
+        skipDiv.classList.add('appear');
         playMode = 1; 
     }
     else {
@@ -49,10 +49,9 @@ frnd.addEventListener('click', () => {
         document.querySelector('#scoreFrnd').classList.remove('appear');
         scoreP1.classList.add('hide'); scoreP2.classList.add('hide');
         player1 = 'Player 1'; score1 = 0; player2 = 'Player 2'; score2 = 0;
-        document.querySelector('.outerDivOfSkip').classList.remove('appear');
-        skip.classList.remove('skipFrnd');
+        skipDiv.classList.remove('appear');
         skip.classList.add('hide');
-        playerInp.classList.remove('appear');
+        playerInpFrnd.classList.remove('appear');
         p1.classList.add('hide'); p2.classList.add('hide'); 
         p1.value = p2.value = ''; skip.innerText = 'SKIP';
         frnd.classList.remove('frndToBack');
@@ -68,22 +67,21 @@ comp.addEventListener('click', () => {
         p.classList.remove('hide');
         playerInpComp.classList.add('appear');
         skip.classList.remove('hide');
-        skip.classList.add('skipComp');
-        document.querySelector('.outerDivOfSkip').classList.add('appear');
+        skipDiv.classList.add('appear');
         playMode = 2; 
     }
     else {
-        restartGame();//enables goFirst also
+        restartGame();
         playMode = 0;
         start = false;
         goFirstInpMarkCheck();
+        displayGrid.classList.remove('gridSlideComp');
         goFirst.classList.add('hide');
         document.querySelector('#scoreComp').classList.remove('appear');
         scoreP.classList.add('hide'); scoreC.classList.add('hide');
         comp.classList.remove('compToBack1');
         player = 'Guest'; score1 = 0; score2 = 0;
-        document.querySelector('.outerDivOfSkip').classList.remove('appear');
-        skip.classList.remove('skipComp');
+        skipDiv.classList.remove('appear');
         skip.classList.add('hide');
         playerInpComp.classList.remove('appear');
         p.classList.add('hide');
