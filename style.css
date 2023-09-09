@@ -230,12 +230,11 @@ h1 {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 .shrink {
-    left: 39.1%;
     animation: shrink 1.8s linear;
 }
 @keyframes shrink {
-    from {width: 200px}
-    to {width: 0px; left: 39.1%}
+    from {width: 200px;}
+    to {width: 0px;}
 }
 .victLine {
     background: linear-gradient(45deg, #3498db, #e74c3c);
