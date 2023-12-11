@@ -410,7 +410,3 @@ victoryLine = () => {
         line.classList.remove('disappear');
     }, 1700);
 }
-
-isGridEmpty = () => {
-    return grid.flat().every((val, newGrid) => val === newGrid[0]);
-}
