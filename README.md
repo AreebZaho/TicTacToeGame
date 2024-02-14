@@ -23,6 +23,12 @@ A classic Tic-Tac-Toe game built with HTML, CSS, and vanilla JavaScript. Challen
 3. Take Turns: Click on empty squares to mark them with your symbol ('X' or 'O').
 4. Win: The first player to get three of their symbols in a row (horizontally, vertically, or diagonally) wins!
 
+## Screenshots
+![Tic-Tac-Toe Game Screenshot](images/s1.png)
+![Tic-Tac-Toe Game Screenshot](images/s4.png)
+![Tic-Tac-Toe Game Screenshot](images/s2.png)
+![Tic-Tac-Toe Game Screenshot](images/s3.png)
+
 ## Technologies Used
 HTML,
 CSS,
